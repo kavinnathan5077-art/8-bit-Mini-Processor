@@ -50,7 +50,9 @@ async def test_project(dut):
     dut.ui_in.value = 0b11000000
     await ClockCycles(dut.clk, 1)
 
-    result = dut.uo_out.value.integer
+  await ClockCycles(dut.clk, 1)
+
+result = dut.uo_out.value.to_unsigned()
 
     dut._log.info(f"CPU Output = {result}")
 
