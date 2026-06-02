@@ -29,13 +29,20 @@ async def test_project(dut):
     dut.ui_in.value = 0b10010010
     await ClockCycles(dut.clk, 1)
 
-    # ADD R0,R1
-    dut.ui_in.value = 0b00000100
-    await ClockCycles(dut.clk, 1)
+   # ADD R0,R1
+dut.ui_in.value = 0b00000100
+await ClockCycles(dut.clk, 1)
 
-    # OUT R0
-    dut.ui_in.value = 0b11000000
-    await ClockCycles(dut.clk, 1)
+# wait one extra cycle for register update
+dut.ui_in.value = 0
+await ClockCycles(dut.clk, 1)
+
+# OUT R0
+dut.ui_in.value = 0b11000000
+await ClockCycles(dut.clk, 1)
+
+# wait for output register update
+await ClockCycles(dut.clk, 1)
 
     result = dut.uo_out.value.to_unsigned()
 
