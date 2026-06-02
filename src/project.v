@@ -26,35 +26,27 @@ module tt_um_mini_cpu (
 
     integer i;
 
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            for(i = 0; i < 4; i = i + 1)
-                R[i] <= 8'd0;
+   always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        ...
+    end else begin
+        case(opcode)
 
-            uo_out <= 8'd0;
-        end
-        else begin
-            case(opcode)
+            2'b00:
+                R[rd] <= R[rd] + R[rs];
 
-                // 00 = ADD
-                2'b00:
-                    R[rd] <= R[rd] + R[rs];
+            2'b01:
+                R[rd] <= R[rd] - R[rs];
 
-                // 01 = SUB
-                2'b01:
-                    R[rd] <= R[rd] - R[rs];
+            2'b10:
+                R[rd] <= {6'b0, imm};
 
-                // 10 = MOVI
-                2'b10:
-                    R[rd] <= {6'b000000, imm};
+            2'b11:
+                uo_out <= R[rd];
 
-                // 11 = OUT
-                2'b11:
-                    uo_out <= R[rd];
-
-            endcase
-        end
+        endcase
     end
+end
 
     assign uio_out = 8'b0;
     assign uio_oe  = 8'b0;
