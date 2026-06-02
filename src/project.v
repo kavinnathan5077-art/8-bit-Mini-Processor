@@ -11,7 +11,6 @@ module tt_um_mini_cpu (
     input  wire       rst_n
 );
 
-    // 4 general-purpose registers
     reg [7:0] R [0:3];
 
     wire [1:0] opcode;
@@ -26,27 +25,27 @@ module tt_um_mini_cpu (
 
     integer i;
 
-   always @(posedge clk or negedge rst_n) begin
-    if (!rst_n) begin
-        ...
-    end else begin
-        case(opcode)
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            for (i = 0; i < 4; i = i + 1)
+                R[i] <= 8'd0;
 
-            2'b00:
-                R[rd] <= R[rd] + R[rs];
+            uo_out <= 8'd0;
+        end
+        else begin
+            case (opcode)
 
-            2'b01:
-                R[rd] <= R[rd] - R[rs];
+                2'b00: R[rd] <= R[rd] + R[rs];
 
-            2'b10:
-                R[rd] <= {6'b0, imm};
+                2'b01: R[rd] <= R[rd] - R[rs];
 
-            2'b11:
-                uo_out <= R[rd];
+                2'b10: R[rd] <= {6'b000000, imm};
 
-        endcase
+                2'b11: uo_out <= R[rd];
+
+            endcase
+        end
     end
-end
 
     assign uio_out = 8'b0;
     assign uio_oe  = 8'b0;
