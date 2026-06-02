@@ -24,4 +24,9 @@ module tb;
         .rst_n(rst_n)
     );
 
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk;
+    end
+
 endmodule
